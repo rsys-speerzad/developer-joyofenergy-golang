@@ -15,8 +15,14 @@ import (
 
 func TestServer(t *testing.T) {
 	port := os.Getenv("PORT")
-	os.Setenv("PORT", "8081")
-	defer os.Setenv("PORT", port)
+	if err := os.Setenv("PORT", "8081"); err != nil {
+		t.Fatalf("Failed to set PORT environment variable: %v", err)
+	}
+	defer func() {
+		if err := os.Setenv("PORT", port); err != nil {
+			t.Fatalf("Failed to restore PORT environment variable: %v", err)
+		}
+	}()
 
 	server := NewServer()
 	go func() {
@@ -25,7 +31,11 @@ func TestServer(t *testing.T) {
 			t.Error(err)
 		}
 	}()
-	defer server.Close()
+	defer func() {
+		if err := server.Close(); err != nil {
+			t.Errorf("Failed to close server: %v", err)
+		}
+	}()
 
 	// Wait 50 milliseconds for server to start listening to requests
 	time.Sleep(50 * time.Millisecond)
@@ -33,7 +43,11 @@ func TestServer(t *testing.T) {
 	resp, err := http.Get("http://localhost:8081/readings/read/smartMeterId")
 
 	assert.NoError(t, err)
-	defer resp.Body.Close()
+	defer func() {
+		if err := resp.Body.Close(); err != nil {
+			t.Errorf("Failed to close response body: %v", err)
+		}
+	}()
 
 	expectedContentType := "application/json"
 	actualContentType := resp.Header.Get("Content-Type")

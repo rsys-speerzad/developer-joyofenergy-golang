@@ -7,7 +7,7 @@ import (
 )
 
 type PricePlans struct {
-	pricePlans []domain.PricePlan
+	pricePlans    []domain.PricePlan
 	meterReadings *MeterReadings
 }
 
@@ -45,12 +45,12 @@ func calculateAverageReading(electricityReadings []domain.ElectricityReading) fl
 func calculateTimeElapsed(electricityReadings []domain.ElectricityReading) time.Duration {
 	var first, last time.Time
 	for _, r := range electricityReadings {
-		if r.Time.Before(first) || (first == time.Time{}) {
+		if r.Time.Before(first) || first.IsZero() {
 			first = r.Time
 		}
 	}
 	for _, r := range electricityReadings {
-		if r.Time.After(last) || (last == time.Time{}) {
+		if r.Time.After(last) || last.IsZero() {
 			last = r.Time
 		}
 	}

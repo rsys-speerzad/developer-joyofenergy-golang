@@ -2,7 +2,6 @@ package router
 
 import (
 	"fmt"
-	"github.com/julienschmidt/httprouter"
 	"joi-energy-golang/api"
 	"joi-energy-golang/endpoints/priceplans"
 	"joi-energy-golang/endpoints/readings"
@@ -11,6 +10,8 @@ import (
 	"net/http"
 	"os"
 	"strings"
+
+	"github.com/julienschmidt/httprouter"
 )
 
 func NewServer() *http.Server {
@@ -61,7 +62,7 @@ func newHandler() http.Handler {
 		api.Error(w, r, fmt.Errorf("whoops! My handler has run into a panic"), http.StatusInternalServerError)
 	}
 	r.MethodNotAllowed = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		api.Error(w, r, fmt.Errorf("we have OPTIONS for youm but %v is not among them", r.Method), http.StatusMethodNotAllowed)
+		api.Error(w, r, fmt.Errorf("we have OPTIONS for you but %v is not among them", r.Method), http.StatusMethodNotAllowed)
 	})
 	r.NotFound = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if strings.Contains(r.Header.Get("Accept"), "text/html") {

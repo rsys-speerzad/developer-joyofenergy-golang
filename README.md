@@ -18,23 +18,7 @@ recommending the best suppler to meet their needs.
 You have been placed into their development team, whose current goal is to produce an API which their customers and smart meters will interact with.
 
 Unfortunately, two of the team are on annual leave, and another has called in sick!
-You are left with a ThoughtWorker to progress with the current user stories on the story wall. This is your chance to make an impact on the business, improve the code base and deliver value.
-
-## Story Wall
-
-At JOI energy the development team use a story wall or kanban board to keep track of features or "stories" as they are worked on.
-
-The wall you will be working from today has 7 columns:
-
-- Backlog
-- Ready for Dev
-- In Dev
-- Ready for Testing
-- In Testing
-- Ready for sign off
-- Done
-
-Examples can be found here https://leankit.com/learn/kanban/kanban-board/
+You are left with a Developer to progress with the current user stories on the story wall. This is your chance to make an impact on the business, improve the code base and deliver value.
 
 ## Users
 
