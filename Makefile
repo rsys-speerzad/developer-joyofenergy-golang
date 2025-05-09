@@ -1,5 +1,7 @@
 BUILD_DIR := bin
 TOOLS_DIR := tools
+DOCKER_USERNAME := speerzad
+DOCKER_IMAGE := $(DOCKER_USERNAME)/power-dale
 
 .DEFAULT_GOAL:=help
 .PHONY: all clean lint build test run help
@@ -33,3 +35,11 @@ test:
 
 help: ## Display this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+
+.PHONY: docker-build docker-push
+
+docker-build: ## Build the Docker image
+	docker build -t $(DOCKER_IMAGE):latest .
+
+docker-push: docker-build ## Push the Docker image to Docker Hub
+	docker push $(DOCKER_IMAGE):latest

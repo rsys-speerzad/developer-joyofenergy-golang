@@ -1,10 +1,11 @@
 package priceplans
 
 import (
-	"github.com/julienschmidt/httprouter"
 	"joi-energy-golang/api"
 	"net/http"
 	"strconv"
+
+	"github.com/julienschmidt/httprouter"
 )
 
 type Handler struct {
@@ -44,6 +45,15 @@ func (h *Handler) Recommend(w http.ResponseWriter, r *http.Request, urlParams ht
 		return
 	}
 	result, err := h.service.RecommendPricePlans(smartMeterId, limit)
+	if err != nil {
+		api.Error(w, r, err, 0)
+		return
+	}
+	api.SuccessJson(w, r, result)
+}
+
+func (h *Handler) GetAllPlan(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	result, err := h.service.GetAllPricePlans()
 	if err != nil {
 		api.Error(w, r, err, 0)
 		return

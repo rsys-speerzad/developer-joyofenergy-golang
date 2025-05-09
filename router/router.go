@@ -41,6 +41,7 @@ func addRoutes(r *httprouter.Router) {
 
 	r.GET("/price-plans/compare-all/:smartMeterId", pricePlanHandler.CompareAll)
 	r.GET("/price-plans/recommend/:smartMeterId", pricePlanHandler.Recommend)
+	r.GET("/price-plans", pricePlanHandler.GetAllPlan)
 }
 
 func newHandler() http.Handler {

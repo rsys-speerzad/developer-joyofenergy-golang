@@ -56,3 +56,45 @@ func calculateTimeElapsed(electricityReadings []domain.ElectricityReading) time.
 	}
 	return last.Sub(first)
 }
+
+// GetAllPricePlans returns all price plans
+func (p *PricePlans) GetAllPricePlans() ([]domain.PricePlan, error) {
+	if len(p.pricePlans) == 0 {
+		return nil, domain.ErrNotFound
+	}
+	return p.pricePlans, nil
+}
+
+// GetPricePlanById returns a price plan by its ID
+func (p *PricePlans) GetPricePlanById(id string) (domain.PricePlan, error) {
+	for _, plan := range p.pricePlans {
+		if plan.PlanName == id {
+			return plan, nil
+		}
+	}
+	return domain.PricePlan{}, domain.ErrNotFound
+}
+
+// GetPricePlanByName returns a price plan by its name
+func (p *PricePlans) GetPricePlanByName(name string) (domain.PricePlan, error) {
+	for _, plan := range p.pricePlans {
+		if plan.PlanName == name {
+			return plan, nil
+		}
+	}
+	return domain.PricePlan{}, domain.ErrNotFound
+}
+
+// GetPricePlanBySupplier returns all price plans for a given supplier
+func (p *PricePlans) GetPricePlanBySupplier(supplier string) ([]domain.PricePlan, error) {
+	var plans []domain.PricePlan
+	for _, plan := range p.pricePlans {
+		if plan.EnergySupplier == supplier {
+			plans = append(plans, plan)
+		}
+	}
+	if len(plans) == 0 {
+		return nil, domain.ErrNotFound
+	}
+	return plans, nil
+}

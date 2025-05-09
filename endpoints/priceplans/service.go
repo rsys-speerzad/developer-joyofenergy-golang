@@ -10,6 +10,7 @@ import (
 type Service interface {
 	CompareAllPricePlans(smartMeterId string) (domain.PricePlanComparisons, error)
 	RecommendPricePlans(smartMeterId string, limit uint64) (domain.PricePlanRecommendation, error)
+	GetAllPricePlans() ([]domain.PricePlan, error)
 }
 
 type service struct {
@@ -53,9 +54,20 @@ func (s *service) RecommendPricePlans(smartMeterId string, limit uint64) (domain
 	}
 	sort.Slice(recommendations, func(i, j int) bool { return recommendations[i].Value < recommendations[j].Value })
 
-	if limit > 0 {
+	if limit > 0 && limit < uint64(len(recommendations)) {
 		recommendations = recommendations[:limit]
 	}
 
 	return domain.PricePlanRecommendation{Recommendations: recommendations}, nil
+}
+
+func (s *service) GetAllPricePlans() ([]domain.PricePlan, error) {
+	pricePlans, err := s.pricePlans.GetAllPricePlans()
+	if err != nil {
+		return nil, err
+	}
+	if len(pricePlans) == 0 {
+		return nil, domain.ErrNotFound
+	}
+	return pricePlans, nil
 }
